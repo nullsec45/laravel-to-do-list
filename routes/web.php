@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\{UserController, HomeController};
+use App\Http\Middleware\OnlyGuestMiddleware;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,12 +15,10 @@ use App\Http\Controllers\UserController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [HomeController::class,"home"]);
 
 Route::controller(UserController::class)->group(function(){
-    Route::get("/login","login")->name("page.login");
-    Route::post("/login","doLogin")->name("login");
+    Route::get("/login","login")->name("page.login")->middleware([OnlyGuestMiddleware::class]);
+    Route::post("/login","doLogin")->name("login")->middleware([OnlyGuestMiddleware::class]);
     Route::post("/logout","doLogout")->name("logout");
 });
