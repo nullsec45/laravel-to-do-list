@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Tests\Feature;
 
-use Illuminate\Http\Request;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
-class TodoListControllerTest extends Controller
+class TodoListControllerTest extends TestCase
 {
     public function testTodoList(){
         $this->withSession(
@@ -37,4 +38,20 @@ class TodoListControllerTest extends Controller
           ->assertSeeText("Todo is required");
     }
     
+    public function testRemoveTodolist(){
+        $this->withSession([
+            "user" => "fajar",
+            "todolist" => [
+                [
+                    "id" => "1",
+                    "todo" => "Fajar"
+                ],
+                [
+                    "id" => "2",
+                    "todo" => "Fadhillah"
+                ]
+            ]
+        ])->post("/todolist/1/delete")
+          ->assertRedirect("/todolist");
+    }
 }
