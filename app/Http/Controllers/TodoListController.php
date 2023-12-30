@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\TodoListService;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class TodoListController extends Controller
 {
@@ -34,11 +35,12 @@ class TodoListController extends Controller
         }
 
         $this->todoListService->saveTodo(uniqid(), $todo);
-
+ 
         return redirect()->action([TodoListController::class, "todoList"]);
     }
 
-    public function removeTodo(Request $request, string $todoId){
-
+    public function removeTodo(Request $request, string $todoId):RedirectResponse{
+        $this->todoListService->removeTodo($todoId);
+        return redirect()->action([TodoListController::class,'todoList']);
     }
 }
